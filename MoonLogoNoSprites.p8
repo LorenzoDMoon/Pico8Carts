@@ -1,0 +1,129 @@
+pico-8 cartridge // http://www.pico-8.com
+version 29
+__lua__
+--gameloop
+
+function _init()
+	bg = 13
+	dark = 6
+	light = 7
+	logotimer = 0
+	timer = 30
+	logo="pvp5w9/pvp2w5g1w8/pvg1w1g3w2g1w6g1p1w2/p0p9g0w4p2g1p1g1w2/p0p8g3p1g4p1g1w1g1w6g1w1g1w2/pvp3g4p2g6w4g1w2/pvp2g3p6w1p3g1w2p1g2w2/pvp4g1p0p1g2p1g2w3/pvp3g1p0p3g2p2w3/pvp4g1p4g1p6w2g1p2g1w3/pvp5g1p0p1w4g1w3/ptp1g1p4g1w1g1w3g1w2/pvp6g1p3g1w1g3w1g6w4/ptg4w4g3w5/pvp9g6w0w1/ptp1g4w3g1w7/ptp1g7w8/ptp5g2w1g3w5/ptp5g5w1g1w4/ptp3g2p1g2w1g3w3g1/ptp5w2g5w3/ptp5g1p1g1w1g3w2g1/ptp4g2w3g1w1g2w1/ptp4g1p2g2p1g3w1/ptp8g2p1g2/ptp6g3p1g3/ptp6g1p3g1////p0p2g1p5g3p5g1p3g1p2g2p3g2p2g1p2g1/p0p2g1p5g1p2g1p4g2p1g2p1g1p2g1p1g1p2g1p1g2p1g1/p9g2p1g1p5g1p2g1p4g1p1g1p1g1p1g1p2g1p1g1p2g1p1g1p1g2p1g2/p0p2g1p5g1p2g1p4g1p3g1p1g1p2g1p1g1p2g1p1g1p2g1/p0p2g3p1g1p1g3p2g1p2g1p3g1p2g2p3g2p2g1p2g1//p7g1p1g2p1g2p2g1p1g2p2g2p1g1p1g1p1g2p2g1p1g1p2g2p1g1p2g2p1g2p1g1//g2p1g2p1g1p2g1p1g1p2g2p1g1p1g1p1g1p2g2p1g1p1g1p1g1p2g2p1g2p1g2p2g1p1g1p1g2p2g1p1g1p1g1"
+	ldx = 0
+	ldy = 0
+	ldr = 125
+	angle = 0
+end
+
+function _update60()
+	angle += 5
+	if (angle > 360) angle = 0
+	ldx = ldr * cos(angle/360)
+	ldy = ldr * sin(angle/360)
+	
+	if (ldr > 0)	ldr -= .5
+end
+
+function _draw()
+	cls(bg)
+	drawldmoon()
+end
+
+--draw l.d.moon--
+function drawldmoon()
+ li = 1
+ lj = 1
+ lx = 35+ldx
+ ly = 44+ldy
+ 
+	for i=1,#logo do
+		lchar = sub(logo,i,i)
+		lamt = sub(logo,i+1,i+1)
+		lamt = fixlamt()
+		  
+		drawpixel("p")
+		drawpixel("w",light)
+		drawpixel("g",dark)
+		
+		if lchar == "/" then
+			ly += 1
+			lj = 1
+		end
+		
+	end
+		
+end
+
+function fixlamt()
+	if lamt == "0" then	return 10
+	elseif lamt > "0" and lamt <= "9" then
+		return tonum(lamt)
+	elseif lamt == "v" then return 20
+	elseif lamt == "t" then return 30
+	end
+end
+
+function drawpixel(char,col)
+	if lchar == char then
+	
+		if char != "p" then
+			rectfill(lx+lj-1,ly,lx+lj+lamt-2,ly,col)
+		end
+		
+	 lj += lamt
+	 
+	end
+end
+
+--[[
+logot =
+{
+"pvp5w9/",--done
+"pvp2w5g1w8/",--done
+"pvg1w1g3w2g1w6g1p1w2/",
+"p0p9g0w4p2g1p1g1w2/",
+"p0p8g3p1g4p1g1w1g1w6g1w1g1w2/",
+"pvp3g4p2g6w4g1w2/",
+"pvp2g3p6w1p3g1w2p1g2w2/",
+"pvp4g1p0p1g2p1g2w3/",
+"pvp3g1p0p3g2p2w3/",
+"pvp4g1p4g1p6w2g1p2g1w3/",
+"pvp5g1p0p1w4g1w3/",
+"ptp1g1p4g1w1g1w3g1w2/",
+"pvp6g1p3g1w1g3w1g6w4/",
+"ptg4w4g3w5/",
+"pvp9g6w0w1/",
+"ptp1g4w3g1w7/",
+"ptp1g7w8/",
+"ptp5g2w1g3w5/",
+"ptp5g5w1g1w4/",
+"ptp3g2p1g2w1g3w3g1/",
+"ptp5w2g5w3/",
+"ptp5g1p1g1w1g3w2g1/",
+"ptp4g2w3g1w1g2w1/",
+"ptp4g1p2g2p1g3w1/",
+"ptp8g2p1g2/",
+"ptp6g3p1g3/",
+"ptp6g1p3g1/",
+"///",
+"p0p2g1p5g3p5g1p3g1p2g2p3g2p2g1p2g1/",
+"p0p2g1p5g1p2g1p4g2p1g2p1g1p2g1p1g1p2g1p1g2p1g1/",
+"p9g2p1g1p5g1p2g1p4g1p1g1p1g1p1g1p2g1p1g1p2g1p1g1p1g2p1g2/",
+"p0p2g1p5g1p2g1p4g1p3g1p1g1p2g1p1g1p2g1p1g1p2g1/",
+"p0p2g3p1g1p1g3p2g1p2g1p3g1p2g2p3g2p2g1p2g1/",
+"/",
+"p7g1p1g2p1g2p2g1p1g2p2g2p1g1p1g1p1g2p2g1p1g1p2g2p1g1p2g2p1g2p1g1/",
+"/",
+"g2p1g2p1g1p2g1p1g1p2g2p1g1p1g1p1g1p2g2p1g1p1g1p1g1p2g2p1g2p1g2p2g1p1g1p1g2p2g1p1g1p1g1"
+}
+--]]
+__gfx__
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+__map__
+0000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
